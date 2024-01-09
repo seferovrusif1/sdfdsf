@@ -12,6 +12,7 @@ namespace Twitter.Business.Dtos.BlogDtos
     {
         public string Description { get; set; }
         public int UserId { get; set; }
+        public int UpdateCount { get; set; }
     }
     public class BlogCreateDtoValidator : AbstractValidator<BlogCreateDto>
     {
@@ -25,7 +26,9 @@ namespace Twitter.Business.Dtos.BlogDtos
                 .NotEmpty()
                 .NotNull()
                 .GreaterThan(0);
-
+            RuleFor(x => x.UpdateCount)
+                .NotEmpty()
+                .NotNull();
         }
     }
 }

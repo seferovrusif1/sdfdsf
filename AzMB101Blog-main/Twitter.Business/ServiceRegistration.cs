@@ -1,6 +1,8 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Twitter.Business.Dtos.TopicDtos;
+using Twitter.Business.ExternalServices.Implements;
+using Twitter.Business.ExternalServices.Interfaces;
 using Twitter.Business.Profiles;
 using Twitter.Business.Repositories.Implements;
 using Twitter.Business.Repositories.Interfaces;
@@ -14,12 +16,17 @@ namespace Twitter.Business
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ITopicRepository, TopicRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
             return services;
         }
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<ITopicService, TopicService>();
+            services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
+
 
             return services;
         }
