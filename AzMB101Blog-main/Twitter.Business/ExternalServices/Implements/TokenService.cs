@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Twitter.Business.Dtos.AuthDtos;
 using Twitter.Business.ExternalServices.Interfaces;
 using Twitter.Core.Entities;
 
@@ -13,12 +14,13 @@ namespace Twitter.Business.ExternalServices.Implements;
 
 public class TokenService : ITokenService
 {
-    public string CreateToken(AppUser user)
+    public string CreateToken(TokenParamsDto dto)
     {
         List<Claim> claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-        claims.Add(new Claim(ClaimTypes.GivenName, user.FullName));
-        claims.Add(new Claim("BirthDay", user.BirthDate.ToString()));
+        claims.Add(new Claim(ClaimTypes.Name, dto.user.UserName));
+        claims.Add(new Claim(ClaimTypes.GivenName, dto.user.FullName));
+        claims.Add(new Claim("BirthDay", dto.user.BirthDate.ToString()));
+        claims.Add(new Claim(ClaimTypes.Role, dto.role));
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh"));
 
         SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);

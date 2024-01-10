@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Twitter.Core.Entities;
+using Twitter.Core.Enums;
+using Twitter.Business.Exceptions.AppUser;
+using Twitter.API.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +57,8 @@ builder.Services.AddAuthentication(opt =>
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-}).    AddJwtBearer(opt =>
+})
+    .AddJwtBearer(opt =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters()
     {
@@ -61,9 +67,9 @@ builder.Services.AddAuthentication(opt =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = "https://localhost:7297/",
-        ValidAudience= "https://localhost:7297/api",
-        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh")),
-        LifetimeValidator=(nb,exp,token,_)=>token!=null?exp>DateTime.UtcNow && nb< DateTime.UtcNow:false
+        ValidAudience = "https://localhost:7297/api",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh")),
+        LifetimeValidator = (nb, exp, token, _) => token != null ? exp > DateTime.UtcNow && nb < DateTime.UtcNow : false
     };
 });
 builder.Services.AddAuthorization();
@@ -72,12 +78,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSeedData();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+    });
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

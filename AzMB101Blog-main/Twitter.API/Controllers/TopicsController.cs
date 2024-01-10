@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Twitter.Business.Dtos.TopicDtos;
 using Twitter.Business.Exceptions.Topic;
 using Twitter.Business.Services.Interfaces;
+using Twitter.Core.Enums;
 
 namespace Twitter.API.Controllers
 {
@@ -34,6 +35,7 @@ namespace Twitter.API.Controllers
                 return Problem(ex.Message);
             }
         }
+        [Authorize(Roles =nameof(Roles.Admin))]
         [HttpPost]
         public async Task<IActionResult> Post(TopicCreateDto dto)
         {
