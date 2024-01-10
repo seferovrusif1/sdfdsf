@@ -59,19 +59,19 @@ builder.Services.AddAuthentication(opt =>
     opt.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "https://localhost:7297/",
-        ValidAudience = "https://localhost:7297/api",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh")),
-        LifetimeValidator = (nb, exp, token, _) => token != null ? exp > DateTime.UtcNow && nb < DateTime.UtcNow : false
-    };
-});
+        opt.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://localhost:7297/",
+            ValidAudience = "https://localhost:7297/api",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh")),
+            LifetimeValidator = (nb, exp, token, _) => token != null ? exp > DateTime.UtcNow && nb < DateTime.UtcNow : false
+        };
+    });
 builder.Services.AddAuthorization();
 var app = builder.Build();
 
