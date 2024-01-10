@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Twitter.Business.Dtos.TopicDtos;
 using Twitter.Business.Exceptions.Common;
 using Twitter.Business.Services.Interfaces;
-<<<<<<< HEAD
 using Twitter.Core.Entities;
-=======
 using Twitter.Core.Enums;
->>>>>>> 946e5f7a3622000852deb9beeea7f42957a071d9
 
 namespace Twitter.API.Controllers
 {
