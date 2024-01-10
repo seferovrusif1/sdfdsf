@@ -18,7 +18,14 @@ namespace Twitter.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            return Ok(await  _authService.Login(dto));
+            try
+            {
+                return Ok(await  _authService.Login(dto));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
     }
 }

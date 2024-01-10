@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Twitter.Business.Dtos.TopicDtos;
 using Twitter.Business.Exceptions.Common;
-using Twitter.Business.Exceptions.Topic;
 using Twitter.Business.Repositories.Interfaces;
 using Twitter.Business.Services.Interfaces;
 using Twitter.Core.Entities;
@@ -24,7 +23,7 @@ namespace Twitter.Business.Services.Implements
         public async Task CreateAsync(TopicCreateDto dto)
         {
             if (await _repo.IsExistAsync(r=> r.Name.ToLower() == dto.Name.ToLower()))
-                throw new TopicExistException();
+                throw new ExistException<Topic>();
             await _repo.CreateAsync(_mapper.Map<Topic>(dto));
             await _repo.SaveAsync();
         }
@@ -51,7 +50,7 @@ namespace Twitter.Business.Services.Implements
             if (dto.Name.ToLower() != data.Name.ToLower())
             {
                 if (await _repo.IsExistAsync(r => r.Name.ToLower() == dto.Name.ToLower()))
-                    throw new TopicExistException();
+                    throw new ExistException<Topic>();
                 data = _mapper.Map(dto, data);
                 await _repo.SaveAsync();
             }

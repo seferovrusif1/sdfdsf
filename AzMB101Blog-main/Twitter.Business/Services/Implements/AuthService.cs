@@ -39,6 +39,7 @@ namespace Twitter.Business.Services.Implements
             }
             if (user == null) throw new UsernameOrEmailOrPaswordWrongException();
             var result = await _userManager.CheckPasswordAsync(user, dto.Password);
+            if (result == false) throw new UsernameOrEmailOrPaswordWrongException();
             return _tokenService.CreateToken(user);
         }
     }

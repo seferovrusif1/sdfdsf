@@ -12,5 +12,8 @@ namespace Twitter.Business.Services.Interfaces
     {
         public Task CreateAsync(BlogCreateDto dto);
         public Task RemoveAsync(int id);
+        public IEnumerable<BlogCreateDto> GetAll();
+        public Task<BlogCreateDto> GetByIdAsync(int id);
+        public Task UpdateAsync(int id, BlogCreateDto dto);
     }
 }

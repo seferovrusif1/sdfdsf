@@ -21,7 +21,5 @@ namespace Twitter.DAL.Configurations
             builder.Property(t => t.UpdateCount)
                 .IsRequired();
         }
-
-      
     }
 }

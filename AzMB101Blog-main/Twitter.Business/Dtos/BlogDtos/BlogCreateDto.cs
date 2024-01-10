@@ -23,11 +23,9 @@ namespace Twitter.Business.Dtos.BlogDtos
                 .MinimumLength(3)
                 .MaximumLength(1024);
             RuleFor(x => x.UserId)
-                .NotEmpty()
                 .NotNull()
                 .GreaterThan(0);
             RuleFor(x => x.UpdateCount)
-                .NotEmpty()
                 .NotNull();
         }
     }

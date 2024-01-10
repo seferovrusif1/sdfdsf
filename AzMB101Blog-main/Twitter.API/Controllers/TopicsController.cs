@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Twitter.Business.Dtos.TopicDtos;
-using Twitter.Business.Exceptions.Topic;
+using Twitter.Business.Exceptions.Common;
 using Twitter.Business.Services.Interfaces;
+using Twitter.Core.Entities;
 
 namespace Twitter.API.Controllers
 {
@@ -42,7 +43,7 @@ namespace Twitter.API.Controllers
                 await _service.CreateAsync(dto);
                 return StatusCode(StatusCodes.Status201Created);
             }
-            catch (TopicExistException ex)
+            catch (ExistException<Topic> ex)
             {
                 return Conflict(ex.Message);
             }
