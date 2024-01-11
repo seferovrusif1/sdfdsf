@@ -26,16 +26,6 @@ namespace Twitter.DAL.Contexts
             }
             return base.SaveChangesAsync(cancellationToken);
         }
-        //public override Task<int> UpdateChangesAsync(CancellationToken cancellationToken = default)
-        //{
-        //    var entries = ChangeTracker.Entries<Blog>();
-        //    foreach (var entry in entries)
-        //    {
-        //        if (entry.State == EntityState.Modified)
-        //            entry.Entity.LastUpdateTime = DateTime.UtcNow;
-        //    }
-        //    return base.SaveChangesAsync(cancellationToken);
-        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(TopicConfiguration).Assembly);

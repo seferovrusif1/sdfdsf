@@ -12,8 +12,8 @@ using Twitter.DAL.Contexts;
 namespace Twitter.DAL.Migrations
 {
     [DbContext(typeof(TwitterContext))]
-    [Migration("20240109150938_Aa")]
-    partial class Aa
+    [Migration("20240111073918_aa")]
+    partial class aa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -248,12 +248,17 @@ namespace Twitter.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("UpdateCount")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Blogs");
                 });
@@ -346,6 +351,22 @@ namespace Twitter.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Twitter.Core.Entities.Blog", b =>
+                {
+                    b.HasOne("Twitter.Core.Entities.AppUser", "User")
+                        .WithMany("Blogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Twitter.Core.Entities.AppUser", b =>
+                {
+                    b.Navigation("Blogs");
                 });
 #pragma warning restore 612, 618
         }

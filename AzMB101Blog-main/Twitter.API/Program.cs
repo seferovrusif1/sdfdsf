@@ -73,6 +73,7 @@ builder.Services.AddAuthentication(opt =>
         };
     });
 builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

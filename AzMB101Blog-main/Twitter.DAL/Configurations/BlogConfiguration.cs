@@ -19,7 +19,10 @@ namespace Twitter.DAL.Configurations
             builder.Property(t => t.UserId)
                 .IsRequired();   
             builder.Property(t => t.UpdateCount)
-                .IsRequired();
+                .HasDefaultValue(0);
+            builder.HasOne(x => x.User)
+                .WithMany(u => u.Blogs)
+                .HasForeignKey(u => u.UserId);
         }
     }
 }

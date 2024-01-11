@@ -11,5 +11,6 @@ namespace Twitter.Core.Entities
     {
         public string FullName{ get; set; }
         public DateTime BirthDate { get; set; }
+        public IEnumerable<Blog> Blogs {  get; set; }
     }
 }

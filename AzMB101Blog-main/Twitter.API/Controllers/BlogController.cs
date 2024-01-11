@@ -43,6 +43,12 @@ namespace Twitter.API.Controllers
             await _service.RemoveAsync(id);
             return Ok();
         }
+        [HttpPut("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDelete(int id)
+        {
+            await _service.SoftRemoveAsync(id);
+            return Ok();
+        }
 
 
 

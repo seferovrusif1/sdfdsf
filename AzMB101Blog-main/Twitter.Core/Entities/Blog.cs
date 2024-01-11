@@ -10,7 +10,8 @@ namespace Twitter.Core.Entities
     {
         public string Description { get; set; }
         public int UpdateCount { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
         //public DateTime LastUpdateTime { get; set; }
 
     }

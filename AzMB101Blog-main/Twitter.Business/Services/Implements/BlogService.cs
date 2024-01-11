@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Twitter.Business.Dtos.BlogDtos;
@@ -15,15 +19,22 @@ namespace Twitter.Business.Services.Implements
 {
     public class BlogService : IBlogService
     {
+        UserManager<AppUser> _userManager { get; }
         IBlogRepository _repo { get; }
         IMapper _mapper { get; }
-
+        IHttpContextAccessor _contextAccessor { get; }
+        readonly string? _userId;
 
         public BlogService(IBlogRepository repo,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor contextAccessor,
+            UserManager<AppUser> userManager)
         {
             _repo = repo;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
+            _userId = _contextAccessor.HttpContext?.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            _userManager = userManager;
         }
 
         public async Task CreateAsync(BlogCreateDto dto)
@@ -31,7 +42,12 @@ namespace Twitter.Business.Services.Implements
             //sadece test ucun yazdm
             if (await _repo.IsExistAsync(r => r.Description.ToLower() == dto.Description.ToLower()))
                 throw new ExistException<Blog>();
-            await _repo.CreateAsync(_mapper.Map<Blog>(dto));
+            Blog blog = new Blog
+            {
+                Description = dto.Description,
+                UserId = _userId
+            };
+            await _repo.CreateAsync(blog);
             await _repo.SaveAsync();
         }
 
@@ -43,18 +59,21 @@ namespace Twitter.Business.Services.Implements
             await _repo.SaveAsync();
         }
 
-        public IEnumerable<BlogCreateDto> GetAll()
-             => _mapper.Map<IEnumerable<BlogCreateDto>>(_repo.GetAll());
+        public IEnumerable<BlogListItemDto> GetAll()
+             => _mapper.Map<IEnumerable<BlogListItemDto>>(_repo.GetAll().Where(x => x.IsDeleted == false));
 
-        public async Task<BlogCreateDto> GetByIdAsync(int id)
+        public async Task<BlogListItemDto> GetByIdAsync(int id)
         {
             var data = await _checkId(id, true);
-            return _mapper.Map<BlogCreateDto>(data);
+            if(data.IsDeleted==true) throw new NotFoundException<Blog>();
+            return _mapper.Map<BlogListItemDto>(data);
+            
         }
 
         public async Task UpdateAsync(int id, BlogCreateDto dto)
         {
             var data = await _checkId(id);
+            if (data.IsDeleted == true) throw new NotFoundException<Blog>();
             if (dto.Description.ToLower() != data.Description.ToLower())
             {
                 if (await _repo.IsExistAsync(r => r.Description.ToLower() == dto.Description.ToLower()))
@@ -62,6 +81,12 @@ namespace Twitter.Business.Services.Implements
                 data = _mapper.Map(dto, data);
                 await _repo.SaveAsync();
             }
+        }
+        public async Task SoftRemoveAsync(int id)
+        {
+            var data = await _checkId(id);
+            data.IsDeleted = true;
+            await _repo.SaveAsync();
         }
         async Task<Blog> _checkId(int id, bool isTrack = false)
         {

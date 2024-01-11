@@ -18,6 +18,7 @@ public class TokenService : ITokenService
     {
         List<Claim> claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Name, dto.user.UserName));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, dto.user.Id));
         claims.Add(new Claim(ClaimTypes.GivenName, dto.user.FullName));
         claims.Add(new Claim("BirthDay", dto.user.BirthDate.ToString()));
         claims.Add(new Claim(ClaimTypes.Role, dto.role));
