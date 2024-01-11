@@ -18,7 +18,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public DbSet<T> Table => _context.Set<T>();
 
     public IQueryable<T> GetAll(bool noTracking = true)
-        => noTracking ? Table.AsNoTracking() : Table;
+        => noTracking ? Table.Where(x => x.IsDeleted == false).AsNoTracking() : Table;
 
     public async Task<bool> IsExistAsync(Expression<Func<T, bool>> expression)
     {
@@ -37,11 +37,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public async Task<T> GetByIdAsync(int id, bool noTracking = true)
     {
-        return noTracking ? await Table.AsNoTracking().SingleOrDefaultAsync(t=> t.Id == id) : await Table.FindAsync(id);
+        return noTracking ? await Table.Where(x=>x.IsDeleted==false).AsNoTracking().SingleOrDefaultAsync(t=> t.Id == id) : await Table.Where(x => x.IsDeleted == false).SingleOrDefaultAsync(t => t.Id == id);
     }
 
     public void Remove(T data)
     {
         Table.Remove(data);
     }
+
+   
 }
