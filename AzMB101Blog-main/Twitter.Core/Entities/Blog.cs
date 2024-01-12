@@ -12,6 +12,8 @@ namespace Twitter.Core.Entities
         public int UpdateCount { get; set; }
         public string UserId { get; set; }
         public AppUser User { get; set; }
+        public IEnumerable<Comment>? Comments { get; set; }
+
         //public DateTime LastUpdateTime { get; set; }
 
     }
