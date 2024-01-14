@@ -12,7 +12,8 @@ namespace Twitter.Business.Dtos.CommmentDtos
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedTime { get; set; }
-        public AppUserListDto AppUser { get; set; }
+        public string AppUserId { get; set; }
         public int ParentCommentId { get; set; }
+        public int BlogId { get; set; }
     }
 }

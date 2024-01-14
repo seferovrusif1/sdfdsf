@@ -12,8 +12,8 @@ using Twitter.DAL.Contexts;
 namespace Twitter.DAL.Migrations
 {
     [DbContext(typeof(TwitterContext))]
-    [Migration("20240112083427_commentdasjd")]
-    partial class commentdasjd
+    [Migration("20240114191027_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -247,6 +247,9 @@ namespace Twitter.DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UpdateCount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -422,7 +425,7 @@ namespace Twitter.DAL.Migrations
                     b.HasOne("Twitter.Core.Entities.Comment", "ParentComment")
                         .WithMany("ChildComments")
                         .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");

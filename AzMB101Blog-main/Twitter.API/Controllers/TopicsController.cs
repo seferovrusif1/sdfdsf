@@ -60,6 +60,19 @@ namespace Twitter.API.Controllers
             await _service.RemoveAsync(id);
             return Ok();
         }
+
+        [HttpPut("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDelete(int id)
+        {
+            await _service.SoftRemoveAsync(id);
+            return Ok();
+        }
+        [HttpPut("ReverseSoftDelete{id}")]
+        public async Task<IActionResult> ReverseSoftDelete(int id)
+        {
+            await _service.ReverseSoftDelete(id);
+            return Ok();
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, TopicUpdateDto dto)
         {

@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Twitter.Business.Dtos.AppUserDtos;
 using Twitter.Business.Exceptions.AppUser;
 using Twitter.Business.Services.Interfaces;
-using Twitter.Core.Entities;
 using Twitter.Core.Enums;
 
 namespace Twitter.Business.Services.Implements

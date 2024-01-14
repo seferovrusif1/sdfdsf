@@ -14,10 +14,9 @@ namespace Twitter.Business.Profiles
     {
         public BlogMappingProfile()
         {
-            CreateMap<BlogCreateDto, Blog>();
-            CreateMap< Blog, BlogCreateDto> ();
-            CreateMap<Blog, BlogListItemDto> ();
-            CreateMap<BlogListItemDto, Blog> ();
+            CreateMap< Blog, BlogCreateDto> ().ReverseMap();
+            CreateMap<Blog, BlogListItemDto> ().ReverseMap();
+            CreateMap<Blog, BlogDetailDto> ().ReverseMap();
         }
     }
 }

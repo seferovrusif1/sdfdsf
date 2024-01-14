@@ -13,8 +13,8 @@ namespace Twitter.Business.Profiles
     {
         public CommentMappingProfile()
         {
-            CreateMap<Comment,CommentListItemDto>().ReverseMap();
-
+            CreateMap<Comment, CommentListItemDto>().ReverseMap();
+            CreateMap<Comment,CommentCreateDto>().ReverseMap();
         }
     }
 }

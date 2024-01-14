@@ -24,7 +24,7 @@ namespace Twitter.Business.Services.Implements
             _userManager = userManager;
             _tokenService = tokenService;
         }
-        public async Task<string> Login(LoginDto dto)
+        public async Task<TokenDto> Login(LoginDto dto)
         {
             AppUser? user = null;
             if (dto.UsernameOrEmail.Contains("@"))

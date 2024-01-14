@@ -245,6 +245,9 @@ namespace Twitter.DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UpdateCount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -420,7 +423,7 @@ namespace Twitter.DAL.Migrations
                     b.HasOne("Twitter.Core.Entities.Comment", "ParentComment")
                         .WithMany("ChildComments")
                         .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");

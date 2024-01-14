@@ -8,5 +8,7 @@ public interface ITopicService
     public Task<TopicDetailDto> GetByIdAsync(int id);
     public Task CreateAsync(TopicCreateDto dto);
     public Task RemoveAsync(int id);
+    public Task SoftRemoveAsync(int id);
+    public Task ReverseSoftDelete(int id);
     public Task UpdateAsync(int id, TopicUpdateDto dto);
 }

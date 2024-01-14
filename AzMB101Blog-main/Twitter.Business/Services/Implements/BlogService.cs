@@ -1,19 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Twitter.Business.Dtos.BlogDtos;
-using Twitter.Business.Dtos.TopicDtos;
 using Twitter.Business.Exceptions.Common;
 using Twitter.Business.Repositories.Interfaces;
 using Twitter.Business.Services.Interfaces;
-using Twitter.Core.Entities;
 
 namespace Twitter.Business.Services.Implements
 {
@@ -39,15 +31,9 @@ namespace Twitter.Business.Services.Implements
 
         public async Task CreateAsync(BlogCreateDto dto)
         {
-            //sadece test ucun yazdm
-            if (await _repo.IsExistAsync(r => r.Description.ToLower() == dto.Description.ToLower()))
-                throw new ExistException<Blog>();
-            Blog blog = new Blog
-            {
-                Description = dto.Description,
-                UserId = _userId
-            };
-            await _repo.CreateAsync(blog);
+            var entity = _mapper.Map<Blog>(dto);
+            entity.UserId = _userId;
+            await _repo.CreateAsync(entity);
             await _repo.SaveAsync();
         }
 
@@ -60,13 +46,15 @@ namespace Twitter.Business.Services.Implements
         }
 
         public IEnumerable<BlogListItemDto> GetAll()
-             => _mapper.Map<IEnumerable<BlogListItemDto>>(_repo.GetAll().Where(x => x.IsDeleted == false));
+        {
+            return _mapper.Map<IEnumerable<BlogListItemDto>>(_repo.GetAll().Where(x => x.IsDeleted == false));
+        }
 
-        public async Task<BlogListItemDto> GetByIdAsync(int id)
+        public async Task<BlogDetailDto> GetByIdAsync(int id)
         {
             var data = await _checkId(id, true);
             if(data.IsDeleted==true) throw new NotFoundException<Blog>();
-            return _mapper.Map<BlogListItemDto>(data);
+            return _mapper.Map<BlogDetailDto>(data);
             
         }
 
@@ -74,18 +62,23 @@ namespace Twitter.Business.Services.Implements
         {
             var data = await _checkId(id);
             if (data.IsDeleted == true) throw new NotFoundException<Blog>();
-            if (dto.Description.ToLower() != data.Description.ToLower())
-            {
-                if (await _repo.IsExistAsync(r => r.Description.ToLower() == dto.Description.ToLower()))
-                    throw new ExistException<Blog>();
-                data = _mapper.Map(dto, data);
-                await _repo.SaveAsync();
+            if (data.UserId != _userId) throw new Exception("User has no access");
+            data = _mapper.Map(dto, data);
+            data.LastUpdateTime = DateTime.UtcNow;
+            data.UpdateCount++;
+            await _repo.SaveAsync();
             }
-        }
+        
         public async Task SoftRemoveAsync(int id)
         {
             var data = await _checkId(id);
             data.IsDeleted = true;
+            await _repo.SaveAsync();
+        }
+        public async Task ReverseSoftRemoveAsync(int id)
+        {
+            var data = await _checkId(id);
+            data.IsDeleted = false;
             await _repo.SaveAsync();
         }
         async Task<Blog> _checkId(int id, bool isTrack = false)

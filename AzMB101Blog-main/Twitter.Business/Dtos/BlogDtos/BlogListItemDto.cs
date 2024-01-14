@@ -10,8 +10,11 @@ namespace Twitter.Business.Dtos.BlogDtos
 {
     public class BlogListItemDto
     {
+        
+        public int Id{ get; set; }
         public string Description { get; set; }
-        public AppUser User { get; set; }
+        public DateTime LastUpdateTime { get; set; }
+        public string UserId { get; set; }
       
 
     }

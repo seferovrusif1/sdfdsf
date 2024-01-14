@@ -55,6 +55,19 @@ namespace Twitter.Business.Services.Implements
                 await _repo.SaveAsync();
             }
         }
+        public async Task ReverseSoftDelete(int id)
+        {
+            var data = await _checkId(id);
+            data.IsDeleted = false;
+            await _repo.SaveAsync();
+        }
+        public async Task SoftRemoveAsync(int id)
+        {
+            var data = await _checkId(id);
+            data.IsDeleted = true;
+            await _repo.SaveAsync();
+        }
+
 
         async Task<Topic> _checkId(int id, bool isTrack = false)
         {
@@ -63,5 +76,7 @@ namespace Twitter.Business.Services.Implements
             if (data == null) throw new NotFoundException<Topic>();
             return data;
         }
+
+     
     }
 }

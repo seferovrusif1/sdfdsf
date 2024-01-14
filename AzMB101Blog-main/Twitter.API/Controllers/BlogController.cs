@@ -49,6 +49,12 @@ namespace Twitter.API.Controllers
             await _service.SoftRemoveAsync(id);
             return Ok();
         }
+        [HttpPut("ReverseSoftDelete/{id}")]
+        public async Task<IActionResult> ReverseSoftDelete(int id)
+        {
+            await _service.ReverseSoftRemoveAsync(id);
+            return Ok();
+        }
 
 
 

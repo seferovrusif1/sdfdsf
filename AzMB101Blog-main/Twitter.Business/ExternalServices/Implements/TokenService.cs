@@ -14,7 +14,7 @@ namespace Twitter.Business.ExternalServices.Implements;
 
 public class TokenService : ITokenService
 {
-    public string CreateToken(TokenParamsDto dto)
+    public TokenDto CreateToken(TokenParamsDto dto)
     {
         List<Claim> claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Name, dto.user.UserName));
@@ -25,16 +25,20 @@ public class TokenService : ITokenService
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bjkbjkhkbnmbjmjh"));
 
         SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
+        DateTime expires = DateTime.UtcNow.AddMinutes(3000);
         JwtSecurityToken jwt = new JwtSecurityToken(
             "https://localhost:7297/",
             "https://localhost:7297/api",
             claims,
             DateTime.UtcNow,
-            DateTime.UtcNow.AddMinutes(30),
+           expires,
             cred);
         JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
         var token = handler.WriteToken(jwt);
-        return token;
+        return new TokenDto 
+        {
+            Token = token,
+            Expires=expires
+        };
     }
 }
