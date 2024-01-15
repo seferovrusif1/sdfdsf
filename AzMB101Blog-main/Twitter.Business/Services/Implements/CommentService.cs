@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,15 @@ namespace Twitter.Business.Services.Implements
 {
     public class CommentService:ICommentService
     {
+        UserManager<AppUser> _userManager { get; }
         ICommentRepository _repo {  get; set; }
         IHttpContextAccessor _contextAccessor { get; }
         readonly string userId;
         IMapper _mapper { get; set; }
 
-        public CommentService(IMapper mapper, ICommentRepository repo, IHttpContextAccessor contextAccessor)
+        public CommentService(IMapper mapper, ICommentRepository repo, IHttpContextAccessor contextAccessor, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _mapper = mapper;
             _repo = repo;
             _contextAccessor = contextAccessor;

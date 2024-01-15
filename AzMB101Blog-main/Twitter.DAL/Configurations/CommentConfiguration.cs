@@ -18,8 +18,6 @@ namespace Twitter.DAL.Configurations
                 .HasMaxLength(1000);
             builder.Property(t => t.AppUserId)
                 .IsRequired();
-            builder.Property(t => t.ParentCommentId)
-              .IsRequired();
             builder.Property(t => t.BlogId)
                 .IsRequired();
             builder.HasOne(x => x.AppUser)

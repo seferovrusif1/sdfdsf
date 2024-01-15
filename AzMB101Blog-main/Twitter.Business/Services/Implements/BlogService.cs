@@ -25,7 +25,10 @@ namespace Twitter.Business.Services.Implements
             _repo = repo;
             _mapper = mapper;
             _contextAccessor = contextAccessor;
-            _userId = _contextAccessor.HttpContext?.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            if (_contextAccessor.HttpContext.User.Claims.Any())
+            {
+                _userId = _contextAccessor.HttpContext?.User?.Claims?.First(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? throw new NullReferenceException();
+            }
             _userManager = userManager;
         }
 
@@ -72,12 +75,14 @@ namespace Twitter.Business.Services.Implements
         public async Task SoftRemoveAsync(int id)
         {
             var data = await _checkId(id);
+            if (data.UserId != _userId) throw new Exception("User has no access");
             data.IsDeleted = true;
             await _repo.SaveAsync();
         }
         public async Task ReverseSoftRemoveAsync(int id)
         {
             var data = await _checkId(id);
+            if (data.UserId != _userId) throw new Exception("User has no access");
             data.IsDeleted = false;
             await _repo.SaveAsync();
         }
